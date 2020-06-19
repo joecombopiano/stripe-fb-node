@@ -37,4 +37,9 @@ const fb = new FbSignals('<fb_access_token>', '<fb_pixel_id>');
 
 const stripe = fb.loadStripe('<stripe_access_token>');
 
+//do stripey things
+
 ```
+
+## Sending additional data from the front end
+Whether you are using stripe elements or your own implementation of Stripe's checkout, you need to send data to your backend to collect payment using stripe. When sending data to your backend, utilize the `metadata` field on charges to collect additional data fields such as `fbc`,`fbp`,`content_type`, `content_ids`, `contents`. This will ensure all of this information is sent in with the server-side event to facebook. 
