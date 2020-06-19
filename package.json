@@ -1,0 +1,18 @@
+{
+  "name": "stripe-fb-node",
+  "version": "1.0.0",
+  "description": "Stripe wrapper to send server signals to facebook",
+  "main": "index.js",
+  "repository": {
+    "url": "https://github.com/joecombopiano/stripe-fb-node",
+    "type": "git"
+  },
+  "author": "Joe Combopiano",
+  "license": "MIT",
+  "dependencies": {
+    "facebook-nodejs-business-sdk": "^7.0.0"
+  },
+  "devDependencies": {
+    "stripe": "^8.64.0"
+  }
+}
