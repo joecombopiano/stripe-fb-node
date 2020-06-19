@@ -9,14 +9,14 @@ const currency_decimals = require('./currency.json');
 class FBSignals {
     constructor(fb_access_token, pixel_id) {
         this.access_token = fb_access_token;
-        this.pixel_id =  pixel_id;
+        this.pixel_id = pixel_id;
         this.api = bizSdk.FacebookAdsApi.init(this.access_token);
-    }   
+    }
 
     loadStripe(token) {
         this.stripe = require('stripe')(token);
         const send_event = this.sendEvent.bind(this);
-       
+
         //payment intents override
         const intent = this.stripe.paymentIntents.create;
         const previous_intent = intent;
@@ -27,13 +27,12 @@ class FBSignals {
         };
 
         //charges override
-
         const charge = this.stripe.charges.create;
         const previous_charge = charge;
-        
-        this.stripe.charges.create = async function(){
+
+        this.stripe.charges.create = async function () {
             const charge_response = await previous_charge.apply(this, arguments);
-            const server_event_response = await send_event(charge_response);  
+            const server_event_response = await send_event(charge_response);
             return [charge_response, server_event_response];
         }
         return this.stripe;
@@ -95,7 +94,7 @@ class FBSignals {
         if (metadata['content_type'] && (metadata['content_ids'] || metadata['contents'])) {
             customData.setContentType(metadata['content_type']);
             customData.setContentIDs(metadata['content_ids']);
-            customData.setContents(metadata['contents'] || [].map(c=> new Content(c.id, c.quantity, c.item_price)));
+            customData.setContents(metadata['contents'] || [].map(c => new Content(c.id, c.quantity, c.item_price)));
         }
         const serverEvent = (new ServerEvent())
             .setEventName('Purchase')
@@ -107,9 +106,7 @@ class FBSignals {
             .setEvents(eventsData);
 
         const response = await eventRequest.execute();
-        
         return response;
-        
     }
     _getPropertyFromCustomerOrBilling(customer_object, stripe_event, property_name) {
         return customer_object && customer_object[property_name] ? customer_object[property_name] : "" ||
@@ -125,4 +122,3 @@ class FBSignals {
 }
 
 module.exports = FBSignals
-
